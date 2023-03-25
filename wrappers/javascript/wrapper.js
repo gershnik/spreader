@@ -29,6 +29,16 @@
  */
 
 /**
+ * @typedef RowCoord
+ * @type {string | number}
+ */
+
+/**
+ * @typedef ColumnCoord
+ * @type {string | number}
+ */
+
+/**
  * @typedef Scalar
  * @type {null | boolean | number | string | ErrorValue}
  */
@@ -263,7 +273,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      */
     deleteRows(y, count) {
@@ -273,7 +283,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      */
      deleteColumns(x, count) {
@@ -283,7 +293,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      */
     insertRows(y, count) {
@@ -293,7 +303,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      */
     insertColumns(x, count) {
@@ -315,7 +325,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      * @param {number} height 
      */
@@ -327,7 +337,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      */
     clearRowsHeight(y, count) {
@@ -337,7 +347,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      * @param {boolean} hidden 
      */
@@ -348,7 +358,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @returns {LengthInfo}
      */
     getRowHeight(y) {
@@ -362,7 +372,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} y 
+     * @param {RowCoord} y 
      * @param {number} count 
      * @param {LengthInfoHandler} func 
      */
@@ -378,7 +388,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      * @param {number} width 
      */
@@ -390,7 +400,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      */
     clearColumnsWidth(x, count) {
@@ -400,7 +410,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      * @param {boolean} hidden 
      */
@@ -411,7 +421,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @returns {LengthInfo}
      */
     getColumnWidth(x) {
@@ -425,7 +435,7 @@ class Sheet {
     }
 
     /**
-     * @param {string|number} x 
+     * @param {ColumnCoord} x 
      * @param {number} count 
      * @param {LengthInfoHandler} func 
      */
@@ -531,7 +541,7 @@ class Sheet {
     }
 
     /**
-     * @param {number|string} y 
+     * @param {RowCoord} y 
      */
     _unpackRow(y) {
         if (typeof y === 'string' || y instanceof String) {
@@ -545,7 +555,7 @@ class Sheet {
     }
 
     /**
-     * @param {number|string} x 
+     * @param {ColumnCoord} x 
      */
      _unpackColumn(x) {
         if (typeof x === 'string' || x instanceof String) {
