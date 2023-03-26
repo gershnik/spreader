@@ -1,5 +1,5 @@
 
-from spreader import Sheet, Point, Size, EditInfo, FormulaInfo, Errors, ErrorValue
+from eg.spreader import Sheet, Point, Size, EditInfo, FormulaInfo, Errors, ErrorValue
 from .utils import strictEqual
 import math
 import pytest

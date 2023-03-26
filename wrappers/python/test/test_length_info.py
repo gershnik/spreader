@@ -1,4 +1,4 @@
-from spreader import Sheet, LengthInfo, LengthInfoRange
+from eg.spreader import Sheet, LengthInfo, LengthInfoRange
 from .utils import strictEqual
 import pytest
 

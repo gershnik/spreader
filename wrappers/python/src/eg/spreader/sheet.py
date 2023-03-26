@@ -68,19 +68,19 @@ class Sheet(object, metaclass=MetaSheet):
     def moveCells(self, frm: AreaCoord, to: CellCoord) -> None :
         self._impl.moveCells(self._unpackArea(frm), self._unpackPoint(to))
 
-    def deleteRows(self, y: Union[str, int], count: int) -> None:
+    def deleteRows(self, y: RowCoord, count: int) -> None:
         row = self._unpackRow(y)
         self._impl.deleteRows(row, count)
 
-    def deleteColumns(self, x: Union[str, int], count: int) -> None:
+    def deleteColumns(self, x: ColumnCoord, count: int) -> None:
         col = self._unpackColumn(x)
         self._impl.deleteColumns(col, count)
 
-    def insertRows(self, y: Union[str, int], count: int) -> None:
+    def insertRows(self, y: RowCoord, count: int) -> None:
         row = self._unpackRow(y)
         self._impl.insertRows(row, count)
 
-    def insertColumns(self, x: Union[str, int], count: int) -> None:
+    def insertColumns(self, x: ColumnCoord, count: int) -> None:
         col = self._unpackColumn(x)
         self._impl.insertColumns(col, count)
 
@@ -93,45 +93,45 @@ class Sheet(object, metaclass=MetaSheet):
     def recalculate(self) -> None:
         self._impl.recalculate()
 
-    def setRowsHeight(self, y: Union[str, int], count: int, height: int) -> None:
+    def setRowsHeight(self, y: RowCoord, count: int, height: int) -> None:
         row = self._unpackRow(y)
         self._impl.setRowsHeight(row, count, height)
 
-    def clearRowsHeight(self, y: Union[str, int], count: int) -> None:
+    def clearRowsHeight(self, y: RowCoord, count: int) -> None:
         row = self._unpackRow(y)
         self._impl.clearRowsHeight(row, count)
 
-    def hideRows(self, y: Union[str, int], count: int, hidden: bool) -> None:
+    def hideRows(self, y: RowCoord, count: int, hidden: bool) -> None:
         row = self._unpackRow(y)
         self._impl.hideRows(row, count, hidden)
 
-    def getRowHeight(self, y: Union[str, int]) -> LengthInfo:
+    def getRowHeight(self, y: RowCoord) -> LengthInfo:
         row = self._unpackRow(y)
         ret = self._impl.getRowHeight(row)
         return LengthInfo(length=ret[0], hidden=ret[1])
     
-    def rowHeightRanges(self, y: Union[str, int], count: int) -> Iterator[LengthInfoRange]:
+    def rowHeightRanges(self, y: RowCoord, count: int) -> Iterator[LengthInfoRange]:
         row = self._unpackRow(y)
         return self._adaptLengthInfoRangeGenerator(self._impl.rowHeightGenerator(row, count))
     
-    def setColumnsWidth(self, x: Union[str, int], count: int, width: int) -> None:
+    def setColumnsWidth(self, x: ColumnCoord, count: int, width: int) -> None:
         col = self._unpackColumn(x)
         self._impl.setColumnsWidth(col, count, width)
 
-    def clearColumnsWidth(self, x: Union[str, int], count: int) -> None:
+    def clearColumnsWidth(self, x: ColumnCoord, count: int) -> None:
         col = self._unpackColumn(x)
         self._impl.clearColumnsWidth(col, count)
 
-    def hideColumns(self, x: Union[str, int], count: int, hidden: bool) -> None:
+    def hideColumns(self, x: ColumnCoord, count: int, hidden: bool) -> None:
         col = self._unpackColumn(x)
         self._impl.hideColumns(col, count, hidden)
 
-    def getColumnWidth(self, x: Union[str, int]) -> LengthInfo:
+    def getColumnWidth(self, x: ColumnCoord) -> LengthInfo:
         col = self._unpackColumn(x)
         ret = self._impl.getColumnWidth(col)
         return LengthInfo(length=ret[0], hidden=ret[1])
     
-    def columnWidthRanges(self, x: Union[str, int], count: int) -> Iterator[LengthInfoRange]:
+    def columnWidthRanges(self, x: ColumnCoord, count: int) -> Iterator[LengthInfoRange]:
         col = self._unpackColumn(x)
         return self._adaptLengthInfoRangeGenerator(self._impl.columnWidthGenerator(col, count))
 
@@ -155,7 +155,7 @@ class Sheet(object, metaclass=MetaSheet):
         res = self._impl.parseArea(val)
         return Rect(Point(res[0], res[1]), Size(res[2], res[3])) if not res is None else None
 
-    def _unpackRow(self, row: Union[str, int]) -> int:
+    def _unpackRow(self, row: RowCoord) -> int:
         if isinstance(row, str):
             ret = self._impl.parseRow(row)
             if ret is None:
@@ -163,7 +163,7 @@ class Sheet(object, metaclass=MetaSheet):
             return ret
         return row
     
-    def _unpackColumn(self, column: Union[str, int]) -> int:
+    def _unpackColumn(self, column: ColumnCoord) -> int:
         if isinstance(column, str):
             ret = self._impl.parseColumn(column)
             if ret is None:

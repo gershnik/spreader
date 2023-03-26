@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-from spreader import Sheet, Size, Point, Errors, ErrorValue
+from eg.spreader import Sheet, Size, Point, Errors, ErrorValue
 from .utils import strictEqual
 
 

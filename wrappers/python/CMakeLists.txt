@@ -43,12 +43,12 @@ PRIVATE
 
 target_sources(_spreader
 PRIVATE
-    src/spreader/common.h
-    src/spreader/util.h
-    src/spreader/globals.h
-    src/spreader/marshalling.h
-    src/spreader/arguments.h
-    src/spreader/main.cpp
+    src/eg/spreader/common.h
+    src/eg/spreader/util.h
+    src/eg/spreader/globals.h
+    src/eg/spreader/marshalling.h
+    src/eg/spreader/arguments.h
+    src/eg/spreader/main.cpp
 )
 
 # if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")

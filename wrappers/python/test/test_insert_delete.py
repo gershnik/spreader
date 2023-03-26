@@ -1,4 +1,4 @@
-from spreader import Sheet, Size, FormulaInfo
+from eg.spreader import Sheet, Size, FormulaInfo
 from .utils import strictEqual
 import pytest
 

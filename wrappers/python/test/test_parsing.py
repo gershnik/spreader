@@ -1,4 +1,4 @@
-from spreader import Sheet, Point, Size, Rect
+from eg.spreader import Sheet, Point, Size, Rect
 import pytest
 
 def test_indexToRow():

@@ -1,4 +1,4 @@
-from spreader import Sheet
+from eg.spreader import Sheet
 from .utils import strictEqual
 
 def test_suspendResumeRecalc():

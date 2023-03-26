@@ -725,7 +725,7 @@ PyMODINIT_FUNC PyInit__spreader() {
 
     EXTERNAL_PROLOG
 
-        auto typesMod = py_attach(PyImport_ImportModule("spreader.types")); 
+        auto typesMod = py_attach(PyImport_ImportModule("eg.spreader.types")); 
         if (!typesMod)
             return nullptr;
 
