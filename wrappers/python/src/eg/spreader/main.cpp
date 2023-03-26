@@ -93,19 +93,21 @@ PyMethodDef LengthInfoGeneratorObject::methods[] = {
     {nullptr}  /* Sentinel */
 };
 
-PyTypeObject LengthInfoGeneratorObject::typeObject = {
-    PyVarObject_HEAD_INIT(nullptr, 0)
-    .tp_name = "_spreader.LengthInfoGenerator",
-    .tp_basicsize = sizeof(LengthInfoGeneratorObject),
-    .tp_itemsize = 0,
-    .tp_dealloc = destructor(dealloc),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = nullptr,
-    .tp_iter = getiterfunc(_iter__),
-    .tp_iternext = iternextfunc(_next__),
-    .tp_methods = methods,
-    .tp_new = _new__
-};
+PyTypeObject LengthInfoGeneratorObject::typeObject = [](){
+    PyTypeObject ret = {PyVarObject_HEAD_INIT(nullptr, 0)};
+    
+    ret.tp_name = "_spreader.LengthInfoGenerator";
+    ret.tp_basicsize = sizeof(LengthInfoGeneratorObject);
+    ret.tp_itemsize = 0;
+    ret.tp_dealloc = destructor(dealloc);
+    ret.tp_flags = Py_TPFLAGS_DEFAULT;
+    ret.tp_doc = nullptr;
+    ret.tp_iter = getiterfunc(_iter__);
+    ret.tp_iternext = iternextfunc(_next__);
+    ret.tp_methods = methods;
+    ret.tp_new = _new__;
+    return ret;
+}();
 
 
 struct SheetObject {
@@ -691,17 +693,18 @@ PyMethodDef SheetObject::methods[] = {
     {nullptr}  /* Sentinel */
 };
 
-PyTypeObject SheetObject::typeObject = {
-    PyVarObject_HEAD_INIT(nullptr, 0)
-    .tp_name = "_spreader.Sheet",
-    .tp_basicsize = sizeof(SheetObject),
-    .tp_itemsize = 0,
-    .tp_dealloc = destructor(dealloc),
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = nullptr,
-    .tp_methods = methods,
-    .tp_new = _new__
-};
+PyTypeObject SheetObject::typeObject = [](){
+    PyTypeObject ret = {PyVarObject_HEAD_INIT(nullptr, 0)};
+    ret.tp_name = "_spreader.Sheet";
+    ret.tp_basicsize = sizeof(SheetObject);
+    ret.tp_itemsize = 0;
+    ret.tp_dealloc = destructor(dealloc);
+    ret.tp_flags = Py_TPFLAGS_DEFAULT;
+    ret.tp_doc = nullptr;
+    ret.tp_methods = methods;
+    ret.tp_new = _new__;
+    return ret;
+}();
 
 
 static PyMethodDef _spreaderMethods[] = {
