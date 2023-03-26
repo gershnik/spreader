@@ -35,6 +35,11 @@ PRIVATE
     PY_SSIZE_T_CLEAN
 )
 
+target_compile_options(_spreader 
+PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4714>
+)
+
 target_link_options(_spreader 
 PRIVATE
     "$<$<CXX_COMPILER_ID:AppleClang>:-Wl,-object_path_lto,${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lto.o>"
