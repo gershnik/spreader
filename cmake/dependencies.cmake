@@ -7,7 +7,7 @@ set(DECLARED_DEPENDENCIES "")
 
 FetchContent_Declare(sys_string
     GIT_REPOSITORY  https://github.com/gershnik/sys_string.git
-    GIT_TAG         v2.9
+    GIT_TAG         7bd08d7119e2a372bb66b639a3d1fbeed4dcaf5c
     GIT_SHALLOW     TRUE
     GIT_PROGRESS    TRUE
     SOURCE_SUBDIR   lib
