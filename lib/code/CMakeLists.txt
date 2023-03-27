@@ -40,7 +40,7 @@ PUBLIC
 
 target_compile_options(spreader 
 PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/utf-8;/W4;/WX;/wd4065;/wd4505;/permissive-;/Zc:__cplusplus,throwingNew,preprocessor>
+    $<$<CXX_COMPILER_ID:MSVC>:/utf-8;/W4;/WX;/wd4065;/wd4505;/wd4324;/permissive-;/Zc:__cplusplus,throwingNew,preprocessor>
     $<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-pedantic;-ftemplate-backtrace-limit=0>
     $<$<CXX_COMPILER_ID:AppleClang>:-Wall;-Wextra;-pedantic;-fpch-instantiate-templates;-ftemplate-backtrace-limit=0>
     $<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-pedantic> 
