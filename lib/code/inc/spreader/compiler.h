@@ -21,7 +21,9 @@
     #define SPR_NO_UNIQUE_ADDRESS [[msvc::no_unique_address]]
 	#define SPR_UNREACHABLE __assume(false)
 
-	#define SPR_HAS_64_BIT_INTRINSICS
+	#if defined(_M_AMD64) 
+		#define SPR_HAS_MSVC_64_BIT_INTRINSICS
+	#endif
 
 #elif defined(__clang__)
 

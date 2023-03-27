@@ -454,7 +454,7 @@ static int32_t ceil_log2pow5(const int32_t e) {
     return log2pow5(e) + 1;
 }
 
-#if defined(SPR_HAS_64_BIT_INTRINSICS)
+#if defined(SPR_HAS_MSVC_64_BIT_INTRINSICS)
 
     SPR_ALWAYS_INLINE
     static uint64_t umul128(const uint64_t a, const uint64_t b, uint64_t* const productHi) {
@@ -527,10 +527,28 @@ static int32_t ceil_log2pow5(const int32_t e) {
         return (hi << (64 - dist)) | (lo >> dist);
     }
     
-    SPR_ALWAYS_INLINE
-    static uint32_t floor_log2(const uint64_t value) {
-        return 63 - __builtin_clzll(value);
-    }
+    #ifdef _MSC_VER
+
+        SPR_ALWAYS_INLINE
+        static uint32_t floor_log2(const uint64_t value) {
+            unsigned long index;
+            #if _WIN64
+                return _BitScanReverse64(&index, value) ? index : 64;
+            #else
+                if (_BitScanReverse(&index, uint32_t(value >> 32)))
+                    return index + 32;
+                return _BitScanReverse(&index, uint32_t(value)) ? index : 64;
+            #endif
+        }
+
+    #else 
+
+        SPR_ALWAYS_INLINE
+        static uint32_t floor_log2(const uint64_t value) {
+            return 63 - __builtin_clzll(value);
+        }
+
+    #endif
 
 #endif
 
@@ -601,7 +619,7 @@ static int32_t ceil_log2pow5(const int32_t e) {
         return mulShift64(4 * m, mul, j);
     }
 
-#elif defined(SPR_HAS_64_BIT_INTRINSICS)
+#elif defined(SPR_HAS_MSVC_64_BIT_INTRINSICS)
 
     SPR_ALWAYS_INLINE
     static uint64_t mulShift64(const uint64_t m, const uint64_t* const mul, const int32_t j) {
