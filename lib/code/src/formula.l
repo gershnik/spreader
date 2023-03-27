@@ -8,25 +8,18 @@
 %option prefix="sprf"
 %option noinput nounput
 
-%top{
+%{
     #include "formula-parser.h"
     #include <spreader/floating-decimal.h>
     #include <spreader/compiler.h>
-
-    using namespace Spreader;
-    using namespace Spreader::FormulaParser;
+    #include <spreader/cell-grid.h>
 
     SPR_CLANG_WARNING_DISABLE("-Wsign-compare")
     SPR_CLANG_WARNING_DISABLE("-Wmisleading-indentation")
     SPR_MSVC_WARNING_DISABLE(4018)
 
-    #if !__has_include(<unistd.h>)
-        #define YY_NO_UNISTD_H
-    #endif
-}
-
-%{
-    #include <spreader/cell-grid.h>
+    using namespace Spreader;
+    using namespace Spreader::FormulaParser;
 
     static auto parseColumn(const char * str) -> std::optional<SizeType>;
     static auto parseRow(const char * str) -> std::optional<SizeType>;

@@ -55,7 +55,7 @@ auto Formula::parse(String str, Point at) -> std::pair<FormulaPtr, FormulaRefere
 
     FormulaParser::Builder builder(str, at);
 
-    StringScanner scanner(str);
+    FormulaParser::StringScanner scanner(str);
     FormulaParser::Parser parser(builder, scanner.get());
     parser();
     auto res = builder.build();

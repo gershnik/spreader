@@ -35,6 +35,8 @@ PRIVATE
 target_compile_definitions(spreader
 PUBLIC
     $<$<BOOL:${SKBUILD}>:SYS_STRING_USE_PYTHON=1>
+PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:YY_NO_UNISTD_H>
 )
 
 
