@@ -18,6 +18,7 @@
 
     SPR_CLANG_WARNING_DISABLE("-Wsign-compare")
     SPR_CLANG_WARNING_DISABLE("-Wmisleading-indentation")
+    SPR_MSVC_WARNING_DISABLE(4018)
 
     #if !__has_include(<unistd.h>)
         #define YY_NO_UNISTD_H
