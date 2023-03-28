@@ -1,0 +1,69 @@
+name: Build
+
+on: 
+  push:
+    branches: 
+      - '*'
+      - '*/**'
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'Acknowledgments.md'
+      - '.github/workflows/publish.yml'
+
+jobs:
+  library:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Build Dir
+        id: cache-build-dir
+        uses: actions/cache@v3
+        with:
+          path: out
+          key: ${{ runner.os }}-out
+
+      - name: Build and Test
+        run: |
+          cmake -E make_directory out
+          cd out
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64;arm64 ..
+          cmake --build out --target run-library-test
+
+  emscripten:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Build Dir
+        id: cache-build-dir
+        uses: actions/cache@v3
+        with:
+          path: out
+          key: ${{ runner.os }}-emscripten-out
+
+      - name: Setup EMSDK
+        uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.26
+          actions-cache-folder: 'emsdk-cache'
+
+      - name: Build and Test
+        run: |
+          cmake -E make_directory out
+          cd out
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake ..
+          cmake --build out --target run-spreader.js-test
+
+      
+          
