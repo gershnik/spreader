@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 
+if (NOT DEFINED SPR_JAVASCRIPT_PACKAGE_DIR)
+    file(REAL_PATH ${CMAKE_CURRENT_BINARY_DIR}/.. SPR_JAVASCRIPT_PACKAGE_DIR)    
+endif()
+
+#SPR_JAVASCRIPT_PACKAGE_DIR affects the configuration
 configure_file(package.json.config ${CMAKE_CURRENT_LIST_DIR}/package.json @ONLY)
 
 add_custom_target(run-spreader.js-test ALL
