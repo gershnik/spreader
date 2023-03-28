@@ -9,8 +9,9 @@ on:
       - 'README.md'
       - '.gitignore'
       - 'LICENSE'
+      - 'CHANGELOG.md'
       - 'Acknowledgments.md'
-      - '.github/workflows/publish.yml'
+      - '.github/workflows/release.yml'
 
 jobs:
   native:

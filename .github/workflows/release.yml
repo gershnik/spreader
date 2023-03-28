@@ -1,5 +1,15 @@
 name: Release
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        description: 'Release type'
+        required: true
 
 jobs:
   release:
@@ -18,7 +28,7 @@ jobs:
 
       - name: Set release version
         run: |
-          echo "NEW_VERSION=$(tools/next-version.py patch)" >> $GITHUB_ENV
+          echo "NEW_VERSION=$(tools/next-version.py ${{ github.event.inputs.release-type }})" >> $GITHUB_ENV
 
       - name: Update changelog
         uses: superfaceai/release-changelog-action@v2
