@@ -24,9 +24,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Cmake and Ninja 
-        uses: lukka/get-cmake@latest
-
       - name: Cache Build Dir
         id: cache-build-dir
         uses: actions/cache@v3
@@ -37,8 +34,8 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
-          cmake --build out --target run-library-test
+          cmake -S . -B out -DCMAKE_BUILD_TYPE=Debug -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake --build out --target run-library-test --config Debug
   
   windows-x86:
     runs-on: windows-latest
@@ -46,9 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Cmake and Ninja 
-        uses: lukka/get-cmake@latest
 
       - name: Cache Build Dir
         id: cache-build-dir
@@ -60,8 +54,8 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_GENERATOR_PLATFORM=Win32
-          cmake --build out --target run-library-test
+          cmake -S . -B out -A Win32
+          cmake --build out --target run-library-test --config Debug
 
   windows-arm64:
     runs-on: windows-latest
@@ -78,13 +72,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: out
-          key: windows-x86-out
+          key: windows-arm64-out
 
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_GENERATOR_PLATFORM=ARM64
-          cmake --build out --target run-library-test
+          cmake -S . -B out -A ARM64
+          cmake --build out --target run-library-test --config Debug
 
   emscripten:
     runs-on: ubuntu-latest
@@ -92,9 +86,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Cmake and Ninja 
-        uses: lukka/get-cmake@latest
 
       - name: Cache Build Dir
         id: cache-build-dir
@@ -112,8 +103,8 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
-          cmake --build out --target run-spreader.js-test
+          cmake -S . -B out -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+          cmake --build out --target run-spreader.js-test --config Debug
 
       
           
