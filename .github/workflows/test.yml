@@ -13,7 +13,7 @@ on:
       - '.github/workflows/publish.yml'
 
 jobs:
-  library:
+  native:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -34,7 +34,47 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cmake -S . -B out -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+          cmake --build out --target run-library-test
+  
+  windows-x86:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Build Dir
+        id: cache-build-dir
+        uses: actions/cache@v3
+        with:
+          path: out
+          key: windows-x86-out
+
+      - name: Build and Test
+        run: |
+          cmake -E make_directory out
+          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_GENERATOR_PLATFORM=Win32
+          cmake --build out --target run-library-test
+
+  windows-arm64:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Build Dir
+        id: cache-build-dir
+        uses: actions/cache@v3
+        with:
+          path: out
+          key: windows-x86-out
+
+      - name: Build and Test
+        run: |
+          cmake -E make_directory out
+          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_GENERATOR_PLATFORM=ARM64
           cmake --build out --target run-library-test
 
   emscripten:
@@ -60,8 +100,7 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cd out
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake ..
+          cmake -S . -B out -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
           cmake --build out --target run-spreader.js-test
 
       
