@@ -112,41 +112,100 @@ class Sheet(object, metaclass=MetaSheet):
         '''
         Copies an area of cells to another location.
 
+        The `dst` argument is the top left corner of destination area.
         This is equivalent to copy/paste operation in GUI spreadsheets.
         The source are can, of course, be a single cell in which case
         this call is equivalent to `copyCell(src ,dst)`
         '''
         self._impl.copyCells(self._unpackArea(src), self._unpackPoint(dst))
 
-    def moveCell(self, frm: CellCoord, to: CellCoord) -> None :
-        self._impl.moveCell(self._unpackPoint(frm), self._unpackPoint(to))
+    def moveCell(self, src: CellCoord, dst: CellCoord) -> None :
+        '''
+        Moves a single cell to another location.
+
+        This is equivalent to cut/paste operation in GUI spreadsheets.
+        '''
+        self._impl.moveCell(self._unpackPoint(src), self._unpackPoint(dst))
     
-    def moveCells(self, frm: AreaCoord, to: CellCoord) -> None :
-        self._impl.moveCells(self._unpackArea(frm), self._unpackPoint(to))
+    def moveCells(self, src: AreaCoord, dst: CellCoord) -> None :
+        '''
+        Moves an area of cells to another location
+
+        The `dst` argument is the top left corner of destination area.
+        This is equivalent to cut/paste operation in GUI 
+        The source are can, of course, be a single cell i
+        this call is equivalent to `moveCell(from ,to)`
+        '''
+        self._impl.moveCells(self._unpackArea(src), self._unpackPoint(dst))
 
     def deleteRows(self, y: RowCoord, count: int) -> None:
+        '''
+        Deletes rows from the sheet
+
+        Args:
+            y: row to start deletion from
+            count: number of rows to delete. 0 is a valid value and results in a no-op
+        '''
         row = self._unpackRow(y)
         self._impl.deleteRows(row, count)
 
     def deleteColumns(self, x: ColumnCoord, count: int) -> None:
+        '''
+        Deletes columns from the sheet
+
+        Args:
+            x: column to start deletion from
+            count: number of columns to delete. 0 is a valid value and results in a no-op
+        '''
         col = self._unpackColumn(x)
         self._impl.deleteColumns(col, count)
 
     def insertRows(self, y: RowCoord, count: int) -> None:
+        '''
+        Inserts new rows into the sheet
+
+        Args:
+            y: coordinate of the row **before** which to perform the insertion
+            count: number of rows to insert. 0 is a valid value and results in a no-op
+        '''
         row = self._unpackRow(y)
         self._impl.insertRows(row, count)
 
     def insertColumns(self, x: ColumnCoord, count: int) -> None:
+        '''
+        Inserts new columns into the sheet
+
+        Args:
+            x: coordinate of the column **before** which to perform the insertion
+            count: number of columns to insert. 0 is a valid value and results in a no-op
+        '''
         col = self._unpackColumn(x)
         self._impl.insertColumns(col, count)
 
     def suspendRecalc(self) -> None:
+        '''
+        Suspends automatic recalculation of the sheet
+
+        You call this method multiple times. To undo the suspension
+        call `resumeRecalc` the same number of times. 
+        '''
         self._impl.suspendRecalc()
 
     def resumeRecalc(self) -> None:
+        '''
+        Resumes automatic recalculation of the sheet
+
+        This is the reverse of `suspendRecalc`
+        '''
         self._impl.resumeRecalc()
 
     def recalculate(self) -> None:
+        '''
+        Manually recalculates the sheet
+
+        This method allows you to manually recalculate the sheet when automatic 
+        recalculation is suspended by a call to `suspendRecalc`
+        '''
         self._impl.recalculate()
 
     def setRowsHeight(self, y: RowCoord, count: int, height: int) -> None:
@@ -192,22 +251,85 @@ class Sheet(object, metaclass=MetaSheet):
         return self._adaptLengthInfoRangeGenerator(self._impl.columnWidthGenerator(col, count))
 
     def indexToRow(self, y: int) -> str:
+        '''
+        Converts row index to a row name
+
+        Currently this function exists mainly for symmetry with
+        `indexToColumn`. It converts 0 to "1", 1 to "2" and so on
+        which you can easily do yourself.
+        However, in the future, the library might gain ability to give
+        friendly names to rows in a sheet. In this case, this method will
+        become necessary.
+
+        Args:
+            y: 0-based row index
+        '''
         return self._impl.indexToRow(y)
     
     def indexToColumn(self, x: int) -> str:
+        '''
+        Converts column index to a column name
+
+        0 is converted to "A", 1 to "B" and so on.
+
+        Args:
+            x: 0-based column index
+        '''
         return self._impl.indexToColumn(x)
     
     def parseRow(self, val:str) -> Optional[int]:
+        '''
+        Converts row names to indices, if possible
+
+        Currently this function exists mainly for symmetry with
+        `parseColumn`. It converts "1" to 0, "2" to 1 and so on
+        which you can easily do yourself.
+        However, in the future, the library might gain ability to give
+        friendly names to rows in a sheet. In this case, this method will
+        become necessary.
+
+        Args:
+            val: row name like "1" or "5"
+        Returns:
+            corresponding row index if the name is valid or `None` otherwise
+        '''
         return self._impl.parseRow(val)
     
     def parseColumn(self, val:str) -> Optional[int]:
+        '''
+        Converts column names to indices, if possible
+
+        Args:
+            val: column name like "A" or "AB"
+        Returns:
+            corresponding column index if the name is valid or `None` otherwise
+        '''
         return self._impl.parseColumn(val)
 
     def parsePoint(self, val:str) -> Optional[Point]:
+        '''
+        Converts string cell coordinates to instances of `Point`, if possible
+
+        Args:
+            val: cell coordinate like "A1" or "B5"
+        Returns:
+            corresponding `Point` if the input is valid or `None` otherwise
+        '''
         res = self._impl.parsePoint(val)
         return Point(res[0], res[1]) if not res is None else None
     
     def parseArea(self, val:str) -> Optional[Rect]:
+        '''
+        Converts string area coordinates to instances of `Rect`, if possible
+
+        Note that an area could be a single cell like "A1", in which case the output will
+        be a `Rect` of size `Size(1, 1)`, or a true area like "A1:B2".
+
+        Args:
+            val: area coordinate like "A1:C3" or "B5"
+        Returns:
+            corresponding `Rect` if the input is valid or `None` otherwise
+        '''
         res = self._impl.parseArea(val)
         return Rect(Point(res[0], res[1]), Size(res[2], res[3])) if not res is None else None
 
