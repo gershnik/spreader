@@ -14,12 +14,15 @@ class MetaSheet(type):
         return cls._maxSize()
 
 class Sheet(object, metaclass=MetaSheet):
+    '''A spreadsheet'''
+    
     _maxSizeValue = None
 
     def __init__(self):
         self._impl = SheetImpl()
 
     def size(self) -> Size :
+        '''The size of the sheet'''
         res = self._impl.size()
         return Size(width=res[0], height=res[1])
 
@@ -32,35 +35,88 @@ class Sheet(object, metaclass=MetaSheet):
     
     @property
     def maxSize(self):
+        '''Maximum possible size of a sheet'''
         return Sheet._maxSize()
     
     def nonNullCellCount(self) -> int :
+        '''
+        Returns the number of non-null cells in the sheet.
+
+        This is mainly a debugging/troubleshooting aid.
+        '''
         return self._impl.nonNullCellCount()
     
     def setValueCell(self, coord: CellCoord, value: Scalar) -> None:
+        '''
+        Stores a scalar value (rather than a formula) in a cell.
+        
+        If the `value` is `None` this is equivalent to `clearCellValue`
+        When `value` is an `str` it should never be escaped. This function
+        stores the argument as-is and does no input parsing.
+        '''
         self._impl.setValueCell(self._unpackPoint(coord), value)
 
     def setFormulaCell(self, coord: CellCoord, formula: str) -> None:
+        '''
+        Stores a formula (rather than a scalar value) in a cell.
+
+        There is no error if the formula fails to parse. Instead it is 
+        stored in the cell and evaluates to `Errors.InvalidFormula`
+        '''
         self._impl.setFormulaCell(self._unpackPoint(coord), formula)
 
     def clearCellValue(self, coord: CellCoord) -> None:
+        '''
+        Clears contents of the cell
+
+        This erases cell content (whether a value or a formula) and sets
+        the cell value to `None`. It is equivalent to `setValueCell(coord, None)`.
+        '''
         self._impl.clearCellValue(self._unpackPoint(coord))
 
     def getValue(self, coord: CellCoord) -> Scalar:
+        '''
+        Retrieves cell's value
+
+        For value cells the value is the one stored in it. For formula cells it is
+        the evaluated result.
+        '''
         return self._impl.getValue(self._unpackPoint(coord))
     
     def getEditInfo(self, coord: CellCoord) -> EditInfo:
+        '''
+        Retrieves information about cell of interest when editing it.
+
+        This roughly corresponds to the information spreadsheet UI would need
+        when user selects a cell e.g. presence of formula and its text, extent
+        of array formula etc.
+        This call is relatively expensive and is expected to be called "rarely"
+        on one cell at a time rather than in bulk.
+        '''
         formula, = self._impl.getEditInfo(self._unpackPoint(coord))
         if formula is None:
             return EditInfo()
         text, (width, height) = formula
         return EditInfo(formula = FormulaInfo(text, Size(width, height)))
     
-    def copyCell(self, frm: CellCoord, to: AreaCoord) -> None :
-        self._impl.copyCell(self._unpackPoint(frm), self._unpackArea(to))
+    def copyCell(self, src: CellCoord, dst: AreaCoord) -> None :
+        '''
+        Copies a single cell to a destination area
+
+        This is equivalent to copy/paste operation in GUI spreadsheets.
+        The destination area can, of course, be a single cell
+        '''
+        self._impl.copyCell(self._unpackPoint(src), self._unpackArea(dst))
     
-    def copyCells(self, frm: AreaCoord, to: CellCoord) -> None :
-        self._impl.copyCells(self._unpackArea(frm), self._unpackPoint(to))
+    def copyCells(self, src: AreaCoord, dst: CellCoord) -> None :
+        '''
+        Copies an area of cells to another location.
+
+        This is equivalent to copy/paste operation in GUI spreadsheets.
+        The source are can, of course, be a single cell in which case
+        this call is equivalent to `copyCell(src ,dst)`
+        '''
+        self._impl.copyCells(self._unpackArea(src), self._unpackPoint(dst))
 
     def moveCell(self, frm: CellCoord, to: CellCoord) -> None :
         self._impl.moveCell(self._unpackPoint(frm), self._unpackPoint(to))

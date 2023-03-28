@@ -17,8 +17,6 @@ class Point:
     x: int = 0
     y: int = 0
 
-
-
 @dataclass
 class Size:
     '''A size of an area in a sheet'''
@@ -81,8 +79,6 @@ class ErrorValue:
     Errors can be produced as a result of formula calculations or manually
     set as a cell's value. These correspond to the usual spreadsheet errors 
     such as "#REF!" etc.
-
-    
     '''
     
     _known = {}
@@ -109,16 +105,39 @@ class ErrorValue:
 
 
 class Errors:
+    '''
+    Known errors
+     
+    The set of errors exposed by this class is stable but not closed. 
+    Additional errors might be added in the future. Thus if you serialize sheet 
+    data or interchange it with other libraries or even versions of this library 
+    you should be prepared to deal with `ErrorValue`s not defined here.
+    '''
+    
     NullRange        = ErrorValue( 1, '#NULL!')
+    '''Represents `#NULL!` error'''
     DivisionByZero   = ErrorValue( 2, '#DIV/0!')
+    '''Represents `#DIV/0!` error'''
     InvalidValue     = ErrorValue( 3, '#VALUE!')
+    '''Represents `#VALUE!` error'''
     InvalidReference = ErrorValue( 4, '#REF!') 
+    '''Represents `#REF!` error'''
     InvalidName      = ErrorValue( 5, '#NAME?')
+    '''Represents `#NAME?` error'''
     NotANumber       = ErrorValue( 6, '#NUM!')
+    '''Represents `#NUM!` error'''
     InvalidArgs      = ErrorValue( 7, '#N/A')
-    GettingData      = ErrorValue( 8, '#N/A')
+    '''Represents `#N/A` error'''
+    GettingData      = ErrorValue( 8, '#GETTING_DATA')
+    '''Represents `#GETTING_DATA` error'''
     Spill            = ErrorValue( 9, '#SPILL!') 
+    '''Represents `#SPILL!` error'''
     InvalidFormula   = ErrorValue(10, '#ERROR!')
+    '''
+    Represents an error in parsing a formula.
+
+    This is not an Excel compatible error.
+    '''
         
 
 Scalar = Union[None, bool, float, str, ErrorValue]
@@ -130,12 +149,29 @@ Possible values of a single cell
 
 @dataclass
 class FormulaInfo:
+    '''Information about formula in a cell'''
+
     text: str
+    '''Formula text'''
     extent: Size
+    '''
+    Extent of the formula's dynamic array, if any.
+    
+    If the formula is not an array the size is Size(1, 1)
+    '''
 
 @dataclass
 class EditInfo:
+    '''
+    Information about cell content needed for editing it
+    
+    Currently only one field is defined: formula which describes
+    whether the cell contains a formula and information about it.
+    Additional fields will be added in the future
+    '''
+
     formula: Optional[FormulaInfo] = None
+    '''If present, indicates that the cell contains formula '''
 
 @dataclass
 class LengthInfo:
