@@ -96,7 +96,7 @@ Module['ErrorValue'].InvalidReference = Object.freeze(new ErrorValue( 4)); //#RE
 Module['ErrorValue'].InvalidName      = Object.freeze(new ErrorValue( 5)); //#NAME?
 Module['ErrorValue'].NotANumber       = Object.freeze(new ErrorValue( 6)); //#NUM!
 Module['ErrorValue'].InvalidArgs      = Object.freeze(new ErrorValue( 7)); //#N/A
-Module['ErrorValue'].GettingData      = Object.freeze(new ErrorValue( 8)); //#N/A
+Module['ErrorValue'].GettingData      = Object.freeze(new ErrorValue( 8)); //#GETTING_DATA
 Module['ErrorValue'].Spill            = Object.freeze(new ErrorValue( 9)); //#SPILL!
 Module['ErrorValue'].InvalidFormula   = Object.freeze(new ErrorValue(10)); //#ERROR!
 

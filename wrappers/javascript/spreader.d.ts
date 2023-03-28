@@ -102,7 +102,7 @@ declare namespace Spreader {
      * See {@link Sheet.getEditInfo}
      */
     type EditInfo = {
-        ///If present, indicates that the cell contains formula 
+        /**If present, indicates that the cell contains formula */
         formula?: {
             /** Formula text */
             text: string;
@@ -245,7 +245,7 @@ declare namespace Spreader {
          * Clears contents of the cell
          * 
          * This erases cell content (whether a value or a formula) and sets
-         * the cell value to `null`. It is equivalent to `setValueCell(null)`.
+         * the cell value to `null`. It is equivalent to `setValueCell(coord, null)`.
          * 
          * @param coord  coordinate of the cell
          */
@@ -282,7 +282,7 @@ declare namespace Spreader {
          * Copies a single cell to a destination area
          * 
          * This is equivalent to copy/paste operation in GUI spreadsheets.
-         * The destination area can, of course be a single cell
+         * The destination area can, of course, be a single cell
          * 
          * @param from the coordinate to copy from
          * @param to the area to copy to
