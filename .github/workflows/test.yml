@@ -64,9 +64,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Cmake and Ninja 
-        uses: lukka/get-cmake@latest
-
       - name: Cache Build Dir
         id: cache-build-dir
         uses: actions/cache@v3
