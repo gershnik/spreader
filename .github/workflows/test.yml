@@ -34,8 +34,7 @@ jobs:
       - name: Build and Test
         run: |
           cmake -E make_directory out
-          cd out
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64;arm64 ..
+          cmake -S . -B out -DCMAKE_BUILD_TYPE=RelWithDebInfo -DFETCHCONTENT_QUIET=OFF -DCMAKE_OSX_ARCHITECTURES=x86_64;arm64
           cmake --build out --target run-library-test
 
   emscripten:
