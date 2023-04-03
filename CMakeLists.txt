@@ -28,6 +28,14 @@ endif()
 #    set(CMAKE_EXECUTABLE_SUFFIX_CXX ".html")
 #endif()
 
+if(SKBUILD OR DEFINED EMSCRIPTEN)
+    set(SPR_SINGLE_THREADED_DEFAULT ON)
+else()
+    set(SPR_SINGLE_THREADED_DEFAULT OFF)
+endif()
+
+option(SPR_SINGLE_THREADED "whether to assume single threaded acess" ${SPR_SINGLE_THREADED_DEFAULT})
+
 project(spreader)
 
 include(CheckIPOSupported)
@@ -39,36 +47,28 @@ endif()
 
 include(cmake/dependencies.cmake)
 
-set_target_properties(sys_string PROPERTIES FOLDER "Dependencies")
-set_target_properties(intrusive-shared-ptr PROPERTIES FOLDER "Dependencies")
-if(TARGET Catch2)
-    set_target_properties(Catch2 PROPERTIES FOLDER "Dependencies")
-endif()
-if(TARGET Catch2WithMain)
-    set_target_properties(Catch2WithMain PROPERTIES FOLDER "Dependencies")
-endif()
-
 add_subdirectory(lib/code library)
-if(NOT SKBUILD)
+
+if(SKBUILD) 
+    
+    add_subdirectory(wrappers/python)
+
+else()
+    
     add_subdirectory(lib/test test)
 
     add_custom_target(test DEPENDS run-library-test)
-endif()
 
+    if(DEFINED EMSCRIPTEN)
 
-if(DEFINED EMSCRIPTEN)
+        add_subdirectory(wrappers/javascript)
 
-    add_subdirectory(wrappers/javascript)
+        add_dependencies(test run-spreader.js-test)
 
-    add_dependencies(test run-spreader.js-test)
-
-endif()
-
-if(SKBUILD)
-
-    add_subdirectory(wrappers/python)
+    endif()
 
 endif()
+
 
 
 

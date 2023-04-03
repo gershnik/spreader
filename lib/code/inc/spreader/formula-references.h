@@ -14,7 +14,7 @@
 
 namespace Spreader {
 
-    class FormulaReferences final : public ref_counted<FormulaReferences> {
+    class FormulaReferences final : public ref_counted<FormulaReferences, REFCNT_FLAGS> {
         
         friend ref_counted;
 

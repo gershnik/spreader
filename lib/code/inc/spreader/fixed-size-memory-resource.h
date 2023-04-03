@@ -77,6 +77,9 @@ namespace Spreader {
 
     public:
         auto allocate() -> void * {
+        #if !SPR_SINGLE_THREADED
+            auto lock = std::lock_guard(m_mutex);
+        #endif
             Unit * ret;
             if (this->m_freeList.empty()) {
                 this->m_pages.emplace_back();
@@ -91,6 +94,9 @@ namespace Spreader {
         }
 
         void deallocate(void * p) noexcept {
+        #if !SPR_SINGLE_THREADED
+            auto lock = std::lock_guard(m_mutex);
+        #endif
             Unit * unit = reinterpret_cast<Unit *>(static_cast<std::byte *>(p) - offsetof(typename Unit::Data, bytes) - offsetof(Unit, data));
             this->m_freeList.push_front(*unit);
             auto & page = *unit->pageIt;
@@ -103,6 +109,9 @@ namespace Spreader {
     private:
         std::list<Page> m_pages;
         LinkedList<Unit, LinkedUnitTraits> m_freeList;
+    #if !SPR_SINGLE_THREADED
+        std::mutex m_mutex;
+    #endif
     };
 }
 

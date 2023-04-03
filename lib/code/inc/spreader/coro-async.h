@@ -18,7 +18,7 @@
 
 namespace Spreader {
 
-    class AsyncNotify : public ref_counted<AsyncNotify> {
+    class AsyncNotify : public ref_counted<AsyncNotify, REFCNT_FLAGS> {
         friend ref_counted;
     public:
         virtual void complete() noexcept = 0;

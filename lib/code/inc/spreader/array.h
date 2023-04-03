@@ -16,7 +16,7 @@ SPR_MSVC_WARNING_DISABLE(4324) //'Spreader::Array': structure was padded due to 
 
 namespace Spreader {
 
-    class Array : public ref_counted<Array> {
+    class Array : public ref_counted<Array, REFCNT_FLAGS> {
     public:
         Array(const Array &) = delete;
         Array & operator=(const Array &) = delete;
