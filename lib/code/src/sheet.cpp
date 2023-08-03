@@ -35,7 +35,7 @@ struct Sheet::ReserveNewExtensionCell {
 
         SPR_ASSERT_LOGIC(!cell ||
                             (cell->getType() == CellType::Value &&
-                            get<Scalar::Blank>( &static_cast<ValueCell *>(cell.get())->value() )));
+                            static_cast<ValueCell *>(cell.get())->isBlank()));
         
         int ret = -int(bool(cell));
         cell = FormulaCellExtension::create(formulaCell, Scalar::Blank{});
