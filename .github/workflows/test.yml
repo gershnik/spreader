@@ -36,10 +36,13 @@ jobs:
         - os: ubuntu-latest
           cc: clang-14
           cxx: clang++-14
+        - os: ubuntu-latest
+          cc: clang-15
+          cxx: clang++-15
         - os: windows-latest
           cmake-arch: Win32
         - os: windows-latest
-          cmake-arch: Win64
+          cmake-arch: x64
 
     steps:
       - name: Checkout
@@ -53,6 +56,11 @@ jobs:
               sudo apt-get update
               sudo apt-get install -y libc++-13-dev libc++abi-13-dev
               echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
+            fi
+
+            if [[ '${{ matrix.cc }}' == 'clang-15' ]]; then
+              sudo apt-get update
+              sudo apt-get install -y clang-15 clang++-15
             fi
 
             if [[ '${{ matrix.cc }}' == 'gcc-12' ]]; then
