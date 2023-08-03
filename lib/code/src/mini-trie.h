@@ -11,6 +11,7 @@
 #include <concepts>
 #include <algorithm>
 #include <string.h>
+#include <stdint.h>
 
 #ifdef SPR_TESTING
     #include <iostream>
