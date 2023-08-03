@@ -7,7 +7,7 @@ set(DECLARED_DEPENDENCIES "")
 
 FetchContent_Declare(sys_string
     GIT_REPOSITORY  https://github.com/gershnik/sys_string.git
-    GIT_TAG         v2.10
+    GIT_TAG         v2.12
     GIT_SHALLOW     TRUE
     GIT_PROGRESS    TRUE
     SOURCE_SUBDIR   lib
@@ -16,7 +16,7 @@ list(APPEND DECLARED_DEPENDENCIES sys_string)
 
 FetchContent_Declare(isptr
     GIT_REPOSITORY  https://github.com/gershnik/intrusive_shared_ptr.git
-    GIT_TAG         v1.3
+    GIT_TAG         v1.4
     GIT_PROGRESS    TRUE
     GIT_SHALLOW     TRUE
 )
@@ -52,7 +52,7 @@ foreach(dir ${KNOWN_SUBDIRECTORIES})
 endforeach()
 
 set_target_properties(sys_string PROPERTIES FOLDER "Dependencies")
-set_target_properties(intrusive-shared-ptr PROPERTIES FOLDER "Dependencies")
+set_target_properties(isptr PROPERTIES FOLDER "Dependencies")
 if(TARGET Catch2)
     set_target_properties(Catch2 PROPERTIES FOLDER "Dependencies")
 endif()
