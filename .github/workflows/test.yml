@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           if [[ '${{ matrix.os }}' == 'ubuntu-latest' ]]; then
-            if [[ '${{ matrix.cc }}' == 'clang-13' ]]
+            if [[ '${{ matrix.cc }}' == 'clang-13' ]]; then
               apt-get install libc++-13-dev libc++abi-13-dev
               export CXXFLAGS=-stdlib=libc++
             fi
