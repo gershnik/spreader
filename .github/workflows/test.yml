@@ -37,10 +37,9 @@ jobs:
           cc: clang-14
           cxx: clang++-14
         - os: windows-latest
-        - os: windows-latest
           cmake-arch: Win32
         - os: windows-latest
-          cmake-arch: ARM64
+          cmake-arch: Win64
 
     steps:
       - name: Checkout
@@ -79,7 +78,7 @@ jobs:
           if [[ '${{ matrix.cmake-arch }}' != '' ]]; then
             export CMAKE_ARCH="-A ${{ matrix.cmake-arch }}"
           fi
-          cmake -S . -B out -DCMAKE_BUILD_TYPE=Debug 
+          cmake -S . -B out $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Debug 
 
       - name: Build and Test
         run: |
