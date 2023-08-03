@@ -46,10 +46,13 @@ namespace Spreader {
           
             auto operator()(const String & val, Number count) const -> Scalar {
               
-                if (count.value() < 0 || count.value() > String::max_size)
+                if (count.value() < 0)
                     return Error::InvalidValue;
                 
                 auto intCount = String::size_type(count.value());
+
+                if (intCount > String::max_size)
+                    return Error::InvalidValue;
                 
                 String::utf32_view valView(val);
                 auto cursor = valView.cursor_begin();
@@ -71,10 +74,13 @@ namespace Spreader {
           
             auto operator()(const String & val, Number count) const -> Scalar {
               
-                if (count.value() < 0 || count.value() > String::max_size)
+                if (count.value() < 0)
                     return Error::InvalidValue;
                 
                 auto intCount = String::size_type(count.value());
+
+                if (intCount > String::max_size)
+                    return Error::InvalidValue;
                 
                 String::utf32_view valView(val);
                 auto cursor = valView.cursor_begin<String::utf32_view::cursor_direction::backward>();
@@ -94,13 +100,17 @@ namespace Spreader {
         
         struct Mid {
             auto operator()(const String & val, Number start, Number count) const  -> Scalar {
-                if (start.value() < 1 || start.value() > String::max_size)
+                if (start.value() < 1)
                     return Error::InvalidValue;
-                if (count.value() < 0 || count.value() > String::max_size)
+                if (count.value() < 0)
                     return Error::InvalidValue;
                 
                 auto startIdx = String::size_type(start.value()) - 1;
+                if (startIdx > String::max_size)
+                    return Error::InvalidValue;
                 auto intCount = String::size_type(count.value());
+                if (intCount > String::max_size)
+                    return Error::InvalidValue;
                 
                 if constexpr (std::is_same_v<String::storage_type, char16_t> && OptimizeNativeStorage) {
                     
@@ -157,13 +167,17 @@ namespace Spreader {
           
             auto operator()(const String & val, Number start, Number count, const String & replacement) const  -> Scalar {
                 
-                if (start.value() < 1 || start.value() > String::max_size)
+                if (start.value() < 1)
                     return Error::InvalidValue;
-                if (count.value() < 0 || count.value() > String::max_size)
+                if (count.value() < 0)
                     return Error::InvalidValue;
                 
                 auto startIdx = String::size_type(start.value()) - 1;
+                if (startIdx > String::max_size)
+                    return Error::InvalidValue;
                 auto intCount = String::size_type(count.value());
+                if (intCount > String::max_size)
+                    return Error::InvalidValue;
                 
                 StringBuilder builder;
                 if constexpr (std::is_same_v<String::storage_type, char16_t> && OptimizeNativeStorage) {
@@ -291,10 +305,13 @@ namespace Spreader {
 
             auto operator()(const String & val, const String & findIn, Number start) const  -> Scalar {
 
-                if (start.value() < 1 || start.value() > String::max_size)
+                if (start.value() < 1)
                     return Error::InvalidValue;
 
                 auto startIdx = String::size_type(start.value()) - 1;
+                if (startIdx > String::max_size)
+                    return Error::InvalidValue;
+                
 
                 String::char_access valAccess(val);
                 String::char_access findInAccess(findIn);
