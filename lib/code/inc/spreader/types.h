@@ -22,11 +22,12 @@ namespace Spreader {
     using isptr::refcnt_retain;
     using isptr::make_refcnt;
     using isptr::ref_counted;
+    using isptr::ref_counted_flags;
 
     #if SPR_SINGLE_THREADED
-        #define REFCNT_FLAGS isptr::ref_counted_flags::single_threaded
+        #define REFCNT_FLAGS ref_counted_flags::single_threaded
     #else
-        #define REFCNT_FLAGS isptr::ref_counted_flags::none
+        #define REFCNT_FLAGS ref_counted_flags::none
     #endif
 
     template<class T>
