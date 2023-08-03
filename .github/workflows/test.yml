@@ -50,7 +50,7 @@ jobs:
             if [[ '${{ matrix.cc }}' == 'clang-13' ]]; then
               sudo apt-get update
               sudo apt-get install -y libc++-13-dev libc++abi-13-dev
-              export CXXFLAGS=-stdlib=libc++
+              echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
             fi
           fi
 
