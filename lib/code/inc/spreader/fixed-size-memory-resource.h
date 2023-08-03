@@ -9,6 +9,7 @@
 #include <spreader/util.h>
 
 #include <list>
+#include <mutex>
 
 namespace Spreader {
 
