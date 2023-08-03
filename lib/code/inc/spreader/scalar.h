@@ -65,6 +65,10 @@ namespace Spreader {
             swap(lhs.m_impl, rhs.m_impl);
         }
 
+        constexpr auto isBlank() const noexcept -> bool {
+            return std::get_if<Blank>(&m_impl);
+        }
+
         template<class T>
         friend constexpr auto get(const Scalar & v) noexcept -> const T & {
             auto p = std::get_if<T>(&v.m_impl);

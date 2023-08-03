@@ -35,7 +35,7 @@ namespace Spreader {
         
         struct IsBlank {
             auto operator()(Scalar val) const noexcept -> bool {
-                return get<Scalar::Blank>(&val);
+                return val.isBlank();
             }
         };
         struct IsErr {

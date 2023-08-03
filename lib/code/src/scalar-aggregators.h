@@ -95,7 +95,7 @@ namespace Spreader {
         public:
             auto addDirect(const Scalar & val) noexcept -> bool {
                 if constexpr (AllSemantics) {
-                    if (!get<Scalar::Blank>(&val)) {
+                    if (!val.isBlank()) {
                         ++m_count;
                     }
                 } else {
@@ -110,7 +110,7 @@ namespace Spreader {
             
             auto addIndirect(const Scalar & val) noexcept -> bool {
                 if constexpr (AllSemantics) {
-                    if (!get<Scalar::Blank>(&val)) {
+                    if (!val.isBlank()) {
                         ++m_count;
                     }
                 } else {

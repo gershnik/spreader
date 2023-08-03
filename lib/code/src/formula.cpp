@@ -77,7 +77,7 @@ auto Formula::execute(ExecutionContext & context) const -> bool {
                     using T = std::remove_cv_t<std::remove_pointer_t<decltype(ptr)>>;
 
                     if constexpr (std::is_same_v<T, ValueCell>) {
-                        return !get<Scalar::Blank>(&ptr->value());
+                        return !ptr->isBlank();
                     } else if constexpr (std::is_same_v<T, FormulaCell>) {
                         return false;
                     } else if constexpr (std::is_same_v<T, FormulaCellExtension>) {
