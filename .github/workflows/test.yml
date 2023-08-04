@@ -19,78 +19,85 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+        - os: macos-latest
+        - os: ubuntu-latest
+          cc: gcc-11
+          cxx: g++-11
+        - os: ubuntu-latest
+          cc: gcc-12
+          cxx: g++-12
+        - os: ubuntu-latest
+          cc: gcc-13
+          cxx: g++-13
+        - os: ubuntu-latest
+          cc: clang-13
+          cxx: clang++-13
+        - os: ubuntu-latest
+          cc: clang-14
+          cxx: clang++-14
+        - os: ubuntu-latest
+          cc: clang-15
+          cxx: clang++-15
+        - os: windows-latest
+          cmake-arch: Win32
+        - os: windows-latest
+          cmake-arch: x64
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache Build Dir
-        id: cache-build-dir
-        uses: actions/cache@v3
-        with:
-          path: out
-          key: ${{ runner.os }}-out
+      - name: System Setup
+        shell: bash
+        run: |
+          if [[ '${{ matrix.os }}' == 'ubuntu-latest' ]]; then
+            if [[ '${{ matrix.cc }}' == 'clang-13' ]]; then
+              sudo apt-get update
+              sudo apt-get install -y libc++-13-dev libc++abi-13-dev
+              echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
+            fi
+
+            if [[ '${{ matrix.cc }}' == 'clang-15' ]]; then
+              sudo apt-get update
+              sudo apt-get install -y clang-15 clang++-15
+            fi
+
+            if [[ '${{ matrix.cc }}' == 'gcc-12' ]]; then
+              sudo apt-get update
+              sudo apt-get install -y gcc-12 g++-12
+            fi
+
+            if [[ '${{ matrix.cc }}' == 'gcc-13' ]]; then
+              sudo apt-get update
+              sudo apt-get install -y gcc-13 g++-13
+            fi
+          fi
+
+      - name: Configure
+        shell: bash
+        run: |
+          if [[ '${{ matrix.cc }}' != '' ]]; then
+            export CC=${{ matrix.cc }}
+          fi
+          if [[ '${{ matrix.cxx }}' != '' ]]; then
+            export CXX=${{ matrix.cxx }}
+          fi
+          if [[ '${{ matrix.cmake-arch }}' != '' ]]; then
+            export CMAKE_ARCH="-A ${{ matrix.cmake-arch }}"
+          fi
+          cmake -S . -B out $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Debug 
 
       - name: Build and Test
         run: |
-          cmake -E make_directory out
-          cmake -S . -B out -DCMAKE_BUILD_TYPE=Debug -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
           cmake --build out --target run-library-test --config Debug
   
-  windows-x86:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Cache Build Dir
-        id: cache-build-dir
-        uses: actions/cache@v3
-        with:
-          path: out
-          key: windows-x86-out
-
-      - name: Build and Test
-        run: |
-          cmake -E make_directory out
-          cmake -S . -B out -A Win32
-          cmake --build out --target run-library-test --config Debug
-
-  windows-arm64:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Cache Build Dir
-        id: cache-build-dir
-        uses: actions/cache@v3
-        with:
-          path: out
-          key: windows-arm64-out
-
-      - name: Build and Test
-        run: |
-          cmake -E make_directory out
-          cmake -S . -B out -A ARM64
-          cmake --build out --target library-test --config Debug
-
   emscripten:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Cache Build Dir
-        id: cache-build-dir
-        uses: actions/cache@v3
-        with:
-          path: out
-          key: ${{ runner.os }}-emscripten-out
 
       - name: Setup EMSDK
         uses: mymindstorm/setup-emsdk@v11
@@ -100,7 +107,6 @@ jobs:
 
       - name: Build and Test
         run: |
-          cmake -E make_directory out
           cmake -S . -B out -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
           cmake --build out --target test --config Debug
 

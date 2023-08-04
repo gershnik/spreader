@@ -9,7 +9,7 @@
 
 namespace Spreader {
 
-    class Formula : public ref_counted<Formula>, private FunctionNode {
+    class Formula : public ref_counted<Formula, REFCNT_FLAGS>, private FunctionNode {
 
     friend ref_counted<Formula>;
     friend class FormulaEvaluator;

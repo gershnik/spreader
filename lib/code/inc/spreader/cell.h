@@ -66,7 +66,7 @@ namespace Spreader {
     };
 
     using CellPtr = std::unique_ptr<Cell, Cell::Deleter>;
-    static_assert(sizeof(CellPtr) == sizeof(Cell *), "your standard library has defective unique_ptr that is no pointer sized with empty deleter");
+    static_assert(sizeof(CellPtr) == sizeof(Cell *), "your standard library has defective unique_ptr that is not pointer sized with 0-size deleter");
 
     using ValueCellPtr = std::unique_ptr<ValueCell, Cell::Deleter>;
     using FormulaCellPtr = std::unique_ptr<FormulaCell, Cell::Deleter>;
@@ -83,6 +83,10 @@ namespace Spreader {
 
         void * operator new(size_t size);
         void operator delete(void * p, size_t size) noexcept;
+
+        auto isBlank() const noexcept {
+            return value().isBlank();
+        }
 
         auto copy() const -> CellPtr {
             return CellPtr(new ValueCell(value()));

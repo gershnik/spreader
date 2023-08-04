@@ -8,7 +8,7 @@
 #include <spreader/compiler.h>
 
 #include <vector>
-
+#include <algorithm>
 
 namespace Spreader {
 

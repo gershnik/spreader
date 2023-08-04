@@ -8,6 +8,10 @@ using namespace Spreader;
 TEST_CASE( "Direct arguments", "[formula][formula-now-today]" ) {
 
     Sheet s;
+    s.suspendRecalc();
+    s.setFormulaCell(PT("A1"), "TODAY()");
+    s.setFormulaCell(PT("A2"), "NOW()");
+    s.resumeRecalc();
     
     auto now = time(nullptr);
     tm * today = localtime(&now);
@@ -18,11 +22,10 @@ TEST_CASE( "Direct arguments", "[formula][formula-now-today]" ) {
     auto currentMin = today->tm_min;
     auto currentSec = today->tm_sec;
     
-    s.setFormulaCell(PT("A1"), "TODAY()");
+    
     CHECK_DATE(s.getValue(PT("A1")), currentYear, currentMonth, currentDay);
     std::cout << "Today: " << s.getValue(PT("A1")) << '\n';
     
-    s.setFormulaCell(PT("A1"), "NOW()");
-    CHECK_DATE_TIME(s.getValue(PT("A1")), currentYear, currentMonth, currentDay, currentHour, currentMin, currentSec);
+    CHECK_DATE_TIME(s.getValue(PT("A2")), currentYear, currentMonth, currentDay, currentHour, currentMin, currentSec);
     std::cout << "Now: " << s.getValue(PT("A1")) << '\n';
 }

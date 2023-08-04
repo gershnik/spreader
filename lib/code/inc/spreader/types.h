@@ -18,10 +18,17 @@ namespace Spreader {
 
 
     using isptr::refcnt_ptr;
-    using isptr::ref_counted;
     using isptr::refcnt_attach;
     using isptr::refcnt_retain;
     using isptr::make_refcnt;
+    using isptr::ref_counted;
+    using isptr::ref_counted_flags;
+
+    #if SPR_SINGLE_THREADED
+        #define REFCNT_FLAGS ref_counted_flags::single_threaded
+    #else
+        #define REFCNT_FLAGS ref_counted_flags::none
+    #endif
 
     template<class T>
     struct MarkBitwiseEnum { static constexpr bool Value = false; };

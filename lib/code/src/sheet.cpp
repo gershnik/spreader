@@ -35,7 +35,7 @@ struct Sheet::ReserveNewExtensionCell {
 
         SPR_ASSERT_LOGIC(!cell ||
                             (cell->getType() == CellType::Value &&
-                            get<Scalar::Blank>( &static_cast<ValueCell *>(cell.get())->value() )));
+                            static_cast<ValueCell *>(cell.get())->isBlank()));
         
         int ret = -int(bool(cell));
         cell = FormulaCellExtension::create(formulaCell, Scalar::Blank{});
@@ -211,7 +211,7 @@ struct Sheet::SetBlankCell {
                 } 
 
                 cell = nullptr;
-                return -int(!std::is_same_v<T, nullptr_t>);
+                return -int(!std::is_same_v<T, std::nullptr_t>);
             }
         });
     }
@@ -239,7 +239,7 @@ struct Sheet::SetValueCell {
                     me->removeFormulaDependents(ptr->parent());
                 } 
                 cell = ValueCell::create(value);
-                return -int(!std::is_same_v<T, nullptr_t>) + 1;
+                return -int(!std::is_same_v<T, std::nullptr_t>) + 1;
             }
         });
     }
@@ -268,7 +268,7 @@ struct Sheet::SetFormulaCell {
                 auto newCell = FormulaCell::create(std::move(code), std::move(references), coord, me->m_evalGeneration);
                 me->m_formulaCells.push_back(*newCell);
                 cell = std::move(newCell);
-                return -int(!std::is_same_v<T, nullptr_t>) + 1;
+                return -int(!std::is_same_v<T, std::nullptr_t>) + 1;
             }
         });
     }
@@ -388,7 +388,7 @@ struct Sheet::MoveCell {
                     me->removeFormulaDependents(ptr);
                 }
                 movedCell = std::move(cell);
-                return -int(!std::is_same_v<T, nullptr_t>);
+                return -int(!std::is_same_v<T, std::nullptr_t>);
             }
         });
     }
@@ -412,7 +412,7 @@ struct Sheet::MoveCell {
                     me->removeFormulaDependents(ptr);
                 } 
                 cell = std::move(movedCell);
-                return -int(!std::is_same_v<T, nullptr_t>) + int(bool(cell));
+                return -int(!std::is_same_v<T, std::nullptr_t>) + int(bool(cell));
             }
         });
     }
@@ -563,7 +563,7 @@ struct Sheet::InsertionMoveCell {
                 return 0;
             } else {
                 movedCell = std::move(cell);
-                return -int(!std::is_same_v<T, nullptr_t>);
+                return -int(!std::is_same_v<T, std::nullptr_t>);
             }
         });
     }
